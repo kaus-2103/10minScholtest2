@@ -1,0 +1,21 @@
+1. What method or library did you use to extract the text, and why? Did you face any formatting challenges with the PDF content?
+
+    I used pytesseract combined with pdf2image to extract the Bangla text from the PDF. 
+    Initially, I attempted to use standard PDF parsing libraries like PyMuPDF, pdfplumber, and pdfminer.
+    However, despite the PDF using Unicode-compliant fonts (e.g., NotoSansBengali), these libraries failed to extract clean, 
+    properly ordered text due to how the Bangla content was internally structured in the PDF—likely stored in a visually-correct but logically-disordered format.
+    Because of these formatting challenges, I switched to an OCR-based approach. 
+    I used pdf2image to convert each PDF page into high-resolution images and then 
+    applied pytesseract with the Bangla language model (ben) to accurately extract the text as Unicode Bangla. 
+    While OCR introduces some performance overhead, it provided a reliable way to recover correctly ordered and readable Bangla text from the document.
+    In short, OCR using Tesseract was necessary due to structural and encoding issues that made traditional text extraction libraries unsuitable for this specific PDF.
+
+2. What chunking strategy did you choose (e.g. paragraph-based, sentence-based, character limit)? Why do you think it works well for semantic retrieval?
+
+What embedding model did you use? Why did you choose it? How does it capture the meaning of the text?
+How are you comparing the query with your stored chunks? Why did you choose this similarity method and storage setup?
+How do you ensure that the question and the document chunks are compared meaningfully? What would happen if the query is vague or missing context?
+Do the results seem relevant? If not, what might improve them (e.g. better chunking, better embedding model, larger document)?
+
+
+Poppler path: C:\Program Files\poppler-24.08.0\Library\bin
