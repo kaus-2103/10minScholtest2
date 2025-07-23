@@ -12,7 +12,22 @@
 
 2. What chunking strategy did you choose (e.g. paragraph-based, sentence-based, character limit)? Why do you think it works well for semantic retrieval?
 
-What embedding model did you use? Why did you choose it? How does it capture the meaning of the text?
+        I chose a primarily paragraph-based chunking strategy, with adaptive handling for specific content types like question-answer blocks and vocabulary sections. The extracted OCR text was cleaned and segmented using double newlines as paragraph boundaries to preserve semantic structure. In cases like MCQ-style questions or question-answer blocks, I preserved the entire set (question + options + answer) as a single chunk to maintain their contextual meaning.
+
+    For longer narrative sections (such as stories or explanations), I retained paragraph units but plan to manually or programmatically split oversized chunks, as paragraphs can sometimes exceed optimal embedding sizes. This approach balances maintaining semantic coherence with practical chunk sizing for embedding models.
+
+    I believe this strategy works well for semantic retrieval because:
+
+    Each chunk represents a complete thought or concept unit, such as a full question-answer pair or a paragraph of narrative.
+
+    Embedding models perform better when chunks carry coherent semantic meaning, rather than arbitrary sentence fragments or overly large passages.
+
+    By preserving natural content boundaries (paragraphs, question blocks), the system can return more contextually relevant results during similarity search.
+
+    In short, paragraph-based chunking combined with content-aware adjustments ensures that each chunk captures a meaningful, retrievable unit of information for the embedding model.
+
+3. What embedding model did you use? Why did you choose it? How does it capture the meaning of the text?
+
 How are you comparing the query with your stored chunks? Why did you choose this similarity method and storage setup?
 How do you ensure that the question and the document chunks are compared meaningfully? What would happen if the query is vague or missing context?
 Do the results seem relevant? If not, what might improve them (e.g. better chunking, better embedding model, larger document)?
