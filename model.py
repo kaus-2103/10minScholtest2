@@ -289,3 +289,42 @@ class BanglaRAGChain:
         except Exception as e:
             rprint(Panel(f"[red]Answer generation failed: {e}", expand=False))
             return None, None
+        
+def main():
+    # Initialize the RAG chain
+    rag_chain = BanglaRAGChain()
+
+    # Load models and existing Chroma DB
+    rag_chain.load(
+        chat_model_id="mistralai/Magistral-Small-2506",       # e.g. "gpt2" or your fine-tuned model
+        embed_model_id="sentence-transformers/distiluse-base-multilingual-cased-v2", # e.g. "sentence-transformers/distiluse-base-multilingual-cased-v2"
+        # text_path="path/to/your/textfile.txt",    # Can be ignored or dummy since no chunking now
+        quantization=False,                        # Change to True if you want 4-bit quantization
+        k=4,                                      # Number of documents to retrieve
+        top_k=50,
+        top_p=0.6,
+        max_new_tokens=512,
+        temperature=0.7,
+        chunk_size=500,
+        chunk_overlap=150,
+        hf_token=None                             # Hugging Face token if needed
+    )
+
+    print("\nBangla RAG Chain is ready! Ask questions now.\n")
+
+    while True:
+        query = input("আপনার প্রশ্ন লিখুন (type 'exit' to quit): ").strip()
+        if query.lower() == "exit":
+            print("Exiting...")
+            break
+
+        answer, context = rag_chain.get_response(query)
+        if answer:
+            print(f"\nউত্তর:\n{answer}\n")
+            print(f"প্রাসঙ্গিক তথ্য:\n{context}\n")
+        else:
+            print("দুঃখিত, উত্তর পাওয়া যায়নি। আবার চেষ্টা করুন।\n")
+
+
+if __name__ == "__main__":
+    main()
