@@ -2,11 +2,11 @@ from sentence_transformers import SentenceTransformer
 import chromadb
 
 # === Load Model ===
-model = SentenceTransformer('distiluse-base-multilingual-cased-v2')  # Works with Bangla
+model = SentenceTransformer('intfloat/multilingual-e5-base')  # Works with Bangla
 
 # === Initialize ChromaDB (Persistent) ===
 client = chromadb.PersistentClient(path="./chroma_db")
-collection = client.get_or_create_collection(name="bangla_rag_knowledge_base")
+collection = client.get_or_create_collection(name="bangla_rag_knowledge_base_v2")
 
 # === Load Chunks from File ===
 def load_chunks(file_path):

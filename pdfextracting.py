@@ -5,7 +5,7 @@ import os
 # Optional: Set Tesseract path explicitly (if not added to PATH)
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-def ocr_bangla_from_pdf(pdf_path, output_txt="data\ocr_bangla_output.txt", poppler_path=r"C:\\Poppler\\poppler-24.08.0\\Library\\bin"):
+def ocr_bangla_from_pdf(pdf_path, output_txt="data\ocr_bangla_output2.txt", poppler_path=r"C:\\Poppler\\poppler-24.08.0\\Library\\bin"):
     # Convert PDF to images
     pages = convert_from_path(pdf_path, dpi=300, poppler_path=poppler_path)
 
@@ -32,5 +32,5 @@ def ocr_bangla_from_pdf(pdf_path, output_txt="data\ocr_bangla_output.txt", poppl
     print(f"OCR completed. Bangla text saved to {output_txt}")
 
 if __name__ == "__main__":
-    pdf_path = "data\HSC26-Bangla1st-Paper.pdf"  # Change this path as needed
+    pdf_path = "data\HSC26-Bangla1st-Paper-3-19.pdf"  # Change this path as needed
     ocr_bangla_from_pdf(pdf_path)

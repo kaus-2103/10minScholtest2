@@ -20,6 +20,9 @@ def clean_ocr_text(raw_text):
     # Remove unnecessary page numbers or markers (optional)
     text = re.sub(r'\n\s*\d{1,3}\s*\n', '\n', text)
 
+    # Remove single digit English numbers
+    text = re.sub(r'\b[0-9]\b', '', text)
+
     return text.strip()
 
 
