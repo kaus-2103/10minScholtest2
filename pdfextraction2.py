@@ -1,49 +1,56 @@
 import pytesseract
 from pdf2image import convert_from_path
-import os
+from PyPDF2 import PdfReader
+import re
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
 
-def extract_and_chunk_table(
-    pdf_path,
-    output_txt="data\\table_chunks.txt",
-    poppler_path=r"C:\\Poppler\\poppler-24.08.0\\Library\\bin"
-):
-    pages = convert_from_path(pdf_path, dpi=300, poppler_path=poppler_path)
-    table_chunks = []
-    table_pages = {1, 2, 3, 16}  # 1-based page numbers
+PAGE_NUMBER_PATTERN = re.compile(r'^\s*\d+\s*$')
+HEADER_KEYWORDS = ['অনলাইন ব্যাচ','মূল শব্দ','শব্দার্থ ও টীকা','শব্দের অর্থ ও ব্যাখ্যা']
 
-    for idx, page_image in enumerate(pages):
-        if (idx + 1) not in table_pages:
-            continue
+def is_header_or_page_number(line):
+    if PAGE_NUMBER_PATTERN.match(line):
+        return True
+    for keyword in HEADER_KEYWORDS:
+        if keyword in line:
+            return True
+    return False
 
-        print(f"Extracting table from page {idx+1}...")
+def extract_main_text_rows(pdf_path):
+    reader = PdfReader(pdf_path)
+    images = convert_from_path(pdf_path, first_page=1, last_page=len(reader.pages))
 
-        text = pytesseract.image_to_string(
-            page_image,
-            lang='ben',
-            config='--psm 6'
-        )
+    all_rows = []
+    for img in images:
+        text = pytesseract.image_to_string(img, lang='ben')
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        filtered = [line for line in lines if not is_header_or_page_number(line)]
+        all_rows.extend(filtered)
 
-        lines = text.strip().splitlines()
-        lines = [line.strip() for line in lines if line.strip()]
+    return all_rows
 
-        # Remove filtering: keep all lines
-        # table_lines = [line for line in lines if is_table_line(line)]
-        table_lines = lines
-
-        # Chunking: group every 15 lines as a chunk (adjust as needed)
-        chunk_size = 15
-        for i in range(0, len(table_lines), chunk_size):
-            chunk = table_lines[i:i+chunk_size]
-            table_chunks.append("===TABLE CHUNK===\n" + "\n".join(chunk))
-
-    os.makedirs(os.path.dirname(output_txt), exist_ok=True)
-    with open(output_txt, "w", encoding="utf-8") as f:
-        f.write("\n\n".join(table_chunks))
-
-    print(f"Table extraction and chunking completed. Output saved to: {output_txt}")
+def merge_every_two_lines(rows):
+    """Merge every two consecutive lines into one chunk"""
+    merged_chunks = []
+    i = 0
+    while i < len(rows):
+        if i+1 < len(rows):
+            merged = rows[i] + ' ' + rows[i+1]
+            merged_chunks.append(merged.strip())
+            i += 2
+        else:
+            # Last leftover line
+            merged_chunks.append(rows[i].strip())
+            i += 1
+    return merged_chunks
 
 if __name__ == "__main__":
-    pdf_path = "data\\HSC26-Bangla1st-Paper-3-19.pdf"
-    extract_and_chunk_table(pdf_path)
+    pdf_path = "data/HSC26-Bangla1st-Paper (1).pdf"
+    rows = extract_main_text_rows(pdf_path)
+    chunks = merge_every_two_lines(rows)
+
+    with open("merged_column_chunks.txt", "w", encoding="utf-8") as f:
+        for idx, chunk in enumerate(chunks, 1):
+            f.write(f"[CHUNK {idx}]\n{chunk}\n{'='*50}\n")
+
+    print(f"✅ Done! Extracted {len(chunks)} merged chunks to merged_column_chunks.txt")
