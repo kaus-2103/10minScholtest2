@@ -6,7 +6,7 @@ from sentence_transformers import SentenceTransformer
 
 # === CONFIGURATION ===
 CHROMA_DB_PATH = "./chroma_db"
-COLLECTION_NAME = "bangla_rag_knowledge_base_v2"
+COLLECTION_NAME = "bangla_rag_knowledge_base_v3" # bangla_rag_knowledge_base_v and bangla_rag_knowledge_base_v2 failed
 OLLAMA_MODEL = "mistral"
 TOP_K = 3
 
@@ -60,7 +60,7 @@ def ask_ollama(prompt):
             "stream": False
         }
     )
-    print("📤 Raw response from Ollama:", response.json())  # ← Add this
+    # print("📤 Raw response from Ollama:", response.json())  # bugger
     return response.json()["response"].strip()
 
 # === MAIN RUNNER ===

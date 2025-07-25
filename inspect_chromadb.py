@@ -5,11 +5,11 @@ import chromadb
 
 # === Configuration ===
 CHROMA_DB_PATH = "./chroma_db"
-COLLECTION_NAME = "bangla_rag_knowledge_base"
+COLLECTION_NAME = "bangla_rag_knowledge_base_v3"
 TOP_K = 3
 
 # === Initialize Model & DB ===
-model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
+model = SentenceTransformer("intfloat/multilingual-e5-base")
 client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
 collection = client.get_or_create_collection(name=COLLECTION_NAME)
 
@@ -26,11 +26,9 @@ for i, doc in enumerate(results["documents"][:5]):
 
 # === Test with Multiple Queries ===
 test_queries = [
-    "কবি কে ছিলেন?",
-    "গল্প কোথায় ঘটেছে?",
-    "ব্যাকরণ সংক্রান্ত প্রশ্ন",
-    "অর্থ সংক্রান্ত শব্দ",
-    "ভূগোল বিষয়ক তথ্য"
+    "অনুপমের ভাষায় সুপুরুষ কাকে বলা হয়েছে?",
+    "কাকে অনুপমের ভাগ্য দেবতা বলে উল্লেখ করা হয়েছে?",
+    "বিয়ের সময় কল্যাণীর প্রকৃত বয়স কত ছিল?"
 ]
 
 print("\n\n🔎 Running test queries...\n")

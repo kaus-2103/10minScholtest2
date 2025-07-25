@@ -3,12 +3,12 @@ import chromadb
 from chromadb.config import Settings
 
 # Initialize model
-model = SentenceTransformer('distiluse-base-multilingual-cased-v2')
+model = SentenceTransformer('intfloat/multilingual-e5-base')
 
 # Initialize ChromaDB (local) using PersistentClient
 client = chromadb.PersistentClient(path="./chroma_db")
 
-collection = client.get_or_create_collection(name="bangla_rag_knowledge_base")
+collection = client.get_or_create_collection(name="bangla_rag_knowledge_base_v3")
 
 
 # Load cleaned chunks
@@ -36,7 +36,7 @@ def index_chunks(chunks):
 
 
 if __name__ == "__main__":
-    chunks = load_chunks("data\cleaned_chunked_output.txt")
+    chunks = load_chunks("data/merged.txt")
     index_chunks(chunks)
     print("Embedding & indexing completed.")
     

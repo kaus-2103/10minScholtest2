@@ -6,7 +6,7 @@ model = SentenceTransformer('intfloat/multilingual-e5-base')  # Works with Bangl
 
 # === Initialize ChromaDB (Persistent) ===
 client = chromadb.PersistentClient(path="./chroma_db")
-collection = client.get_or_create_collection(name="bangla_rag_knowledge_base_v2")
+collection = client.get_or_create_collection(name="bangla_rag_knowledge_base_v3") # bangla_rag_knowledge_base_v2 and bangla_rag_knowledge_base_v failed
 
 # === Load Chunks from File ===
 def load_chunks(file_path):
@@ -33,6 +33,6 @@ def index_chunks(chunks):
 
 # === MAIN EXECUTION ===
 if __name__ == "__main__":
-    chunks = load_chunks("data/cleaned_chunked_output.txt")
+    chunks = load_chunks("data/merged.txt")
     print(f"📦 Loaded {len(chunks)} chunks from file.")
     index_chunks(chunks)
