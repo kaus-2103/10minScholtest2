@@ -1,6 +1,6 @@
 # rag_api.py
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 import chromadb
