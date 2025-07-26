@@ -104,19 +104,6 @@ Session memory allows contextual follow-up questions in the same session.
 
 ---
 
-## 📊 Evaluation Matrix
-
-| Metric        | Description                                                                 |
-|---------------|-----------------------------------------------------------------------------|
-| **Groundedness**  | The system returns context-backed answers from relevant document chunks. |
-| **Relevance**     | Cosine similarity (via ChromaDB) ensures top-K relevant chunk retrieval. |
-| **Handling Vagueness** | If the query lacks context or clarity, the model gracefully responds with "উত্তর পাওয়া যায়নি" |
-| **Short-Term Memory** | Maintains last 5 question-answer pairs per session to improve coherence in follow-up queries. |
-| **Noise Reduction**   | Low-confidence chunks (MCQs/Q&A OCR failures) are removed during preprocessing to improve chunk quality. |
-
----
-
-
 ## 🧪 Future Improvements
 
 - Advanced chunking strategies (e.g., QA-aware or sentence-graph-based).
