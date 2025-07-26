@@ -191,6 +191,3 @@ Session memory allows contextual follow-up questions in the same session.
 
 
 
-
-Poppler path: C:\Program Files\poppler-24.08.0\Library\bin
-
